@@ -1,5 +1,7 @@
 :root {
     --background-color: #FCf8f5;
+    --background-color-cart: #FFFFFF;
+    --border-radius: 10px
 }
 
 * {
@@ -9,4 +11,54 @@
 
 body {
     background-color: var(--background-color);
+    font-family: sans-serif;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+}
+
+.desserts {
+    width: 70%;
+}
+
+.desserts__h1 {
+    padding-bottom: 20px;
+}
+
+.desserts__list {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 20px;
+}
+
+.desserts__item {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.desserts__img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+.cart {
+    width: 300px;
+    height: 300px;
+    background-color: var(--background-color-cart);
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+}
+
+.cart__img {
+    width: 200px;
+    
 }
