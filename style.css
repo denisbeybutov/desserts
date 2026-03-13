@@ -6,6 +6,7 @@
     --size-img-mobile: 340px;
     --accent-color: #c83b0e;
     --text-color:  #2f0f03;
+    --button-height: 50px;
 }
 
 * {
@@ -74,12 +75,13 @@ body {
     gap: 10px;
     background-color: var(--background-color-cart);
     border: 1px solid var(--accent-color);
-    height: 40px;
+    height: var(--button-height);
     width: 60%;
     position: absolute;
-    top: calc(var(--size-img) - 20px);
+    z-index: 1;
+    top: calc(var(--size-img) - var(--button-height)  /2);
     left: calc(20%);
-    border-radius: 50px;
+    border-radius: var(--button-height);
     color: var(--text-color);
 }
 
