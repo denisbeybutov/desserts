@@ -1,7 +1,10 @@
 :root {
     --background-color: #FCf8f5;
     --background-color-cart: #FFFFFF;
-    --border-radius: 10px
+    --border-radius: 10px;
+    --size-img: 250px;
+    --accent-color: #c83b0e;
+    --text-color:  #2f0f03;
 }
 
 * {
@@ -12,6 +15,7 @@
 body {
     background-color: var(--background-color);
     font-family: sans-serif;
+    color: var(--text-color);
 }
 
 .container {
@@ -26,6 +30,7 @@ body {
 
 .desserts__h1 {
     padding-bottom: 20px;
+    font-size: 30px;
 }
 
 .desserts__list {
@@ -40,25 +45,87 @@ body {
     flex-direction: column;
     flex-shrink: 0;
     flex-grow: 0;
+    gap: 5px;
+    position: relative;
 }
 
 .desserts__img {
-    width: 250px;
-    height: 250px;
+    width: var(--size-img);
+    height: var(--size-img);
     object-fit: cover;
     border-radius: var(--border-radius);
 }
 
-.cart {
-    width: 300px;
-    height: 300px;
+.desserts__icon {
+    width: 20px;
+    height: 20px;
+}
+
+.desserts__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     background-color: var(--background-color-cart);
-    border-radius: var(--border-radius);
+    border: 1px solid var(--accent-color);
+    height: 40px;
+    width: 60%;
+    position: absolute;
+    top: calc(var(--size-img) - 20px);
+    left: calc(20%);
+    border-radius: 50px;
+    color: var(--text-color);
+}
+
+.desserts__button:hover {
+    background-color: var(--background-color);
+    cursor: pointer;
+}
+
+.desserts__type {
+    padding-top: 25px;
+    font-size: 13px;
+    opacity: .5;
+}
+
+.desserts__price {
+    font-size: 15px;
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.cart {
     display: flex;
     flex-direction: column;
+    padding: 20px;
+    width: 300px;
+    height: fit-content;
+    background-color: var(--background-color-cart);
+    border-radius: var(--border-radius);
+   
+}
+
+.cart__text-header {
+    color: var(--accent-color);
+    font-size: 20px;
+    font-weight: bold;
+
+}
+
+.cart__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 0;
+    gap: 10px;
 }
 
 .cart__img {
-    width: 200px;
+    width: 130px;
     
+}
+
+.cart__text-footer {
+    color: #896258;
+    font-size: 12px;
 }
