@@ -2,6 +2,10 @@
 let cartCounts = [1,1,1,1,1,1,1,1,1]
 // флаг для того чтобы addeventlistener запускался один раз при нажатии + или -
 let actionExecuted = false
+// флаг для удаления картинки из cart один раз в самый первый
+let actionExecutedDeleteCartImg = false
+//счетчик для корзины
+let cartCountAll = 0
 // все кнопки добавления в корзину
 const dessertsBtn = document.querySelectorAll('.desserts__button')
 
@@ -13,12 +17,32 @@ dessertsBtn.forEach(function(button, buttonIndex){
         this.classList.add('active')
         this.previousElementSibling.classList.add('active')
         
-        // вставляем кнопки + и -, счетчик
+        // вставляем кнопки +, -, счетчик
         this.innerHTML = `
                             <button class="desserts__count" data-count="down"> - </button>
                             <p> ${cartCounts[buttonIndex]} </p>
                             <button class="desserts__count" data-count="up"> + </button>
                           `
+        
+        // удаляем содержимое cart в первый раз и выставляем флаг чтобы код не работал при след нажатии любой кнопки
+        if (actionExecutedDeleteCartImg == false) {
+            document.querySelector('.cart__wrapper').innerHTML = ''
+        }
+        actionExecutedDeleteCartImg = true
+        
+        // добавляем в корзину десерт по нажатой кнопке
+        const nameEl = this.nextElementSibling.nextElementSibling.textContent
+        const priceEl = this.nextElementSibling.nextElementSibling.nextElementSibling.textContent
+        document.querySelector('.cart__wrapper').innerHTML += `
+            ${nameEl},
+            ${cartCounts[buttonIndex]}x,
+            @${priceEl},
+            ${(parseFloat(priceEl.replace('$','')) * cartCounts[buttonIndex]).toFixed(2)}
+            </br>`
+        // увлечевичаем общий счетчик десертов и добавляем его в корзину
+        cartCountAll += 1
+        document.querySelector('.cart__text-header').innerHTML = `Your cart (${cartCountAll})`
+
         // делаем основную кнопку не активной 
         this.disabled = true 
 
