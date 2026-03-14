@@ -79,7 +79,7 @@ dessertsBtn.forEach(function(button, buttonIndex){
                         <p>Total</p>
                         <p class = "cart__end-total">$${(total).toFixed(2)}</p>
                     </div>
-                    <button class = "cart__cofirm-button">
+                    <button class = "cart__confirm-button">
                         Confirm Order
                     </button>
                 </div>
@@ -176,6 +176,25 @@ dessertsBtn.forEach(function(button, buttonIndex){
                 }
 
             })
+        })
+
+        document.querySelector('.cart__confirm-button').addEventListener('click', function (){
+            console.log('click')
+            const order = document.querySelector('.order')
+            order.classList.remove('hidden')
+            const orderConfirmed = document.querySelector('.order__confirmed')
+           
+            
+            orderConfirmed.innerHTML += `<div class="cart__text-header">Order Confirmed</div> ${document.querySelector('.cart__wrapper').innerHTML}`
+            order.querySelector('.cart__confirm-button').remove()
+
+            orderConfirmed.innerHTML += `<button class = "cart__confirm-button order__button"> start new order </button>`
+
+            document.querySelector('.order__button').addEventListener('click', function(){
+                location.reload()
+            })
+
+            
         })
 
     })

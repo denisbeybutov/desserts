@@ -198,7 +198,7 @@ body {
     justify-content: space-between;
 }
 
-.cart__cofirm-button {
+.cart__confirm-button {
     width: 100%;
     background-color: var(--accent-color);
     border: none;
@@ -206,6 +206,38 @@ body {
     height: var(--button-height);
     color: var(--background-color);
     font-size: 15px;
+    cursor: pointer;
+}
+
+.cart__confirm-button:hover {
+    background-color: #896258;
+}
+
+
+
+.order {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgb(68, 67, 67,.5);
+    padding: 50px;
+    
+}
+
+.order__confirmed {
+    color: var(--text-color);
+    background-color: var(--background-color);
+    width: 500px;
+    height: 400px;
+    padding: 50px;
+
+}
+
+.hidden {
+    display: none;
 }
 
 @media (max-width: 767px) {
