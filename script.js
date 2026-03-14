@@ -36,15 +36,19 @@ dessertsBtn.forEach(function(button, buttonIndex){
         // добавляем в корзину десерт по нажатой кнопке
         const nameEl = this.nextElementSibling.nextElementSibling.textContent
         const priceEl = this.nextElementSibling.nextElementSibling.nextElementSibling.textContent
-        
-        total += parseFloat(priceEl.replace('$','')) * cartCounts[buttonIndex]
+        const intPriceEL = parseFloat(priceEl.replace('$',''))
+        total += intPriceEL * cartCounts[buttonIndex]
         cartWrapper.innerHTML += `
             <div class = "cart__row">
                 <div>
                     ${nameEl} </br>
-                    ${cartCounts[buttonIndex]}x,
+                    <span class="cart__count">
+                        ${cartCounts[buttonIndex]}x
+                    </span>,
                     @${priceEl},
-                    ${(parseFloat(priceEl.replace('$','')) * cartCounts[buttonIndex]).toFixed(2)}
+                    <span class = "cart__row-total">
+                        ${(intPriceEL * cartCounts[buttonIndex]).toFixed(2)}
+                    </span>
                     </br>
                 </div>
                 <div class = "cart__clear-button">
@@ -69,11 +73,6 @@ dessertsBtn.forEach(function(button, buttonIndex){
                     </button>
                 </div>
                 `
-                
-            
-
-            
-            
         
         //  выставляем флаг чтобы код не работал при след нажатии любой кнопки
         actionExecutedDeleteCartImg = true
@@ -94,6 +93,9 @@ dessertsBtn.forEach(function(button, buttonIndex){
                     // увеличиваем счетчик и выводим его на страницу
                     cartCounts[buttonIndex] += 1
                     this.previousElementSibling.innerHTML = `<p> ${cartCounts[buttonIndex]} </p>`
+                    //вставляем значение в cart
+                    document.querySelector('.cart__count').innerHTML = `${cartCounts[buttonIndex]}x`
+                    document.querySelector('.cart__row-total').innerHTML = `${(intPriceEL * cartCounts[buttonIndex]).toFixed(2)}`
                     // выставляем и сбрасываем флаг через 10мс
                     actionExecuted = true
                     setTimeout(() => actionExecuted = false,10)
