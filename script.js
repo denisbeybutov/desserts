@@ -6,6 +6,8 @@ let actionExecuted = false
 let actionExecutedDeleteCartImg = false
 //счетчик для корзины
 let cartCountAll = 0
+// общая сумма покупки
+let total = 0
 // все кнопки добавления в корзину
 const dessertsBtn = document.querySelectorAll('.desserts__button')
 
@@ -24,21 +26,59 @@ dessertsBtn.forEach(function(button, buttonIndex){
                             <button class="desserts__count" data-count="up"> + </button>
                           `
         
-        // удаляем содержимое cart в первый раз и выставляем флаг чтобы код не работал при след нажатии любой кнопки
+        // удаляем содержимое cart в первый раз
+        const cartWrapper = document.querySelector('.cart__wrapper')
         if (actionExecutedDeleteCartImg == false) {
-            document.querySelector('.cart__wrapper').innerHTML = ''
+            cartWrapper.innerHTML = ''
         }
-        actionExecutedDeleteCartImg = true
+        
         
         // добавляем в корзину десерт по нажатой кнопке
         const nameEl = this.nextElementSibling.nextElementSibling.textContent
         const priceEl = this.nextElementSibling.nextElementSibling.nextElementSibling.textContent
-        document.querySelector('.cart__wrapper').innerHTML += `
-            ${nameEl},
-            ${cartCounts[buttonIndex]}x,
-            @${priceEl},
-            ${(parseFloat(priceEl.replace('$','')) * cartCounts[buttonIndex]).toFixed(2)}
-            </br>`
+        
+        total += parseFloat(priceEl.replace('$','')) * cartCounts[buttonIndex]
+        cartWrapper.innerHTML += `
+            <div class = "cart__row">
+                <div>
+                    ${nameEl} </br>
+                    ${cartCounts[buttonIndex]}x,
+                    @${priceEl},
+                    ${(parseFloat(priceEl.replace('$','')) * cartCounts[buttonIndex]).toFixed(2)}
+                    </br>
+                </div>
+                <div class = "cart__clear-button">
+                    +
+                </div>
+            </div>
+            `
+        // если больше одного элемента то удалить общую сумму и кнопку
+        if (actionExecutedDeleteCartImg === true) {
+            document.querySelector('.cart__end').remove()
+        }
+
+        // вставить общую сумму и кнопку
+        cartWrapper.innerHTML += `
+                <div class = "cart__end">
+                    <div class = "cart__total" >
+                        <p>Total</p>
+                        <p>$${(total).toFixed(2)}</p>
+                    </div>
+                    <button class = "cart__cofirm-button">
+                        Confirm Order
+                    </button>
+                </div>
+                `
+                
+            
+
+            
+            
+        
+        //  выставляем флаг чтобы код не работал при след нажатии любой кнопки
+        actionExecutedDeleteCartImg = true
+        //сбрасываем центрирование в корзине чтобы десерты располагались во всю ширину
+        cartWrapper.classList.add('active')
         // увлечевичаем общий счетчик десертов и добавляем его в корзину
         cartCountAll += 1
         document.querySelector('.cart__text-header').innerHTML = `Your cart (${cartCountAll})`
