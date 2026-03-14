@@ -1,5 +1,9 @@
-// массив для хранения количества десертов
+// массив для хранения количества десертов в карточках
 let cartCounts = [1,1,1,1,1,1,1,1,1]
+// массив для хранения количества десертов в корзине
+let yourCartCounts = [0,0,0,0,0,0,0,0,0]
+// цена на каждый десерт
+let intPriceElArr = [0,0,0,0,0,0,0,0,0]
 // флаг для того чтобы addeventlistener запускался один раз при нажатии + или -
 let actionExecuted = false
 // флаг для удаления картинки из cart один раз в самый первый
@@ -8,6 +12,10 @@ let actionExecutedDeleteCartImg = false
 let cartCountAll = 0
 // общая сумма покупки
 let total = 0
+let total2 = [0,0,0,0,0,0,0,0,0]
+let total3 = 0
+//счетчик
+let myItemIndex = 0
 // все кнопки добавления в корзину
 const dessertsBtn = document.querySelectorAll('.desserts__button')
 
@@ -37,7 +45,10 @@ dessertsBtn.forEach(function(button, buttonIndex){
         const nameEl = this.nextElementSibling.nextElementSibling.textContent
         const priceEl = this.nextElementSibling.nextElementSibling.nextElementSibling.textContent
         const intPriceEL = parseFloat(priceEl.replace('$',''))
+        
         total += intPriceEL * cartCounts[buttonIndex]
+        // console.log(intPriceEL)
+        //console.log(total)
         cartWrapper.innerHTML += `
             <div class = "cart__row">
                 <div>
@@ -47,7 +58,7 @@ dessertsBtn.forEach(function(button, buttonIndex){
                     </span>,
                     @${priceEl},
                     <span class = "cart__row-total">
-                        ${(intPriceEL * cartCounts[buttonIndex]).toFixed(2)}
+                        $${(intPriceEL * cartCounts[buttonIndex]).toFixed(2)}
                     </span>
                     </br>
                 </div>
@@ -66,7 +77,7 @@ dessertsBtn.forEach(function(button, buttonIndex){
                 <div class = "cart__end">
                     <div class = "cart__total" >
                         <p>Total</p>
-                        <p>$${(total).toFixed(2)}</p>
+                        <p class = "cart__end-total">$${(total).toFixed(2)}</p>
                     </div>
                     <button class = "cart__cofirm-button">
                         Confirm Order
@@ -86,16 +97,51 @@ dessertsBtn.forEach(function(button, buttonIndex){
         this.disabled = true 
 
         // слушаем кнопки +
-        document.querySelectorAll('[data-count = "up"]').forEach(function(item, itemIndex){
+        document.querySelectorAll('[data-count = "up"]').forEach(function(item, itemIndex, arr){
             item.addEventListener('click', function(event){
                 // добавляем проверку по флагу на то сколько раз сработал addEventListener
                 if(!actionExecuted) {
                     // увеличиваем счетчик и выводим его на страницу
                     cartCounts[buttonIndex] += 1
-                    this.previousElementSibling.innerHTML = `<p> ${cartCounts[buttonIndex]} </p>`
-                    //вставляем значение в cart
-                    document.querySelector('.cart__count').innerHTML = `${cartCounts[buttonIndex]}x`
-                    document.querySelector('.cart__row-total').innerHTML = `${(intPriceEL * cartCounts[buttonIndex]).toFixed(2)}`
+                    this.previousElementSibling.innerHTML = `<p> ${cartCounts[buttonIndex]} </p>`  
+                    yourCartCounts[itemIndex] = cartCounts[buttonIndex]
+                  
+                    //вставляем значение в cart , вставляем количество в cart
+                    document.querySelectorAll('.cart__count').forEach(function(itemCartCount, itemCartCountIndex){
+                        if (itemIndex == itemCartCountIndex) {
+                        itemCartCount.innerHTML = `${yourCartCounts[itemCartCountIndex]}x`
+                        }
+                    })
+                    
+
+
+                    intPriceElArr[itemIndex] = intPriceEL
+                    //console.log(intPriceEL)
+                    console.log('цена в корзине',intPriceElArr)
+                    document.querySelectorAll('.cart__row-total').forEach(function(itemCartRowTotal, itemCartRowTotalIndex){
+                        if (itemIndex == itemCartRowTotalIndex) {
+                            itemCartRowTotal.innerHTML = `$${(intPriceElArr[itemCartRowTotalIndex]*yourCartCounts[itemIndex]).toFixed(2)}`
+                            total2[itemIndex] = intPriceElArr[itemIndex]*yourCartCounts[itemIndex]
+                            console.log('цена позиции',total2)
+                            total3 = total2.reduce((accumulator, curValue) => accumulator + curValue,0) 
+                            console.log('общая стоимость заказа',total3)
+                            document.querySelector('.cart__end-total').innerHTML = `${total3}`
+                        }
+                    })
+
+
+                    
+                    // document.querySelectorAll('.cart__count').forEach(function(eachCount, eachCountIndex){
+                    //     console.log('each',eachCountIndex)
+                    //     console.log('but',buttonIndex)
+                    //     //if(eachCountIndex === buttonIndex) {}
+                    // })
+                    // document.querySelector('.cart__row-total').innerHTML = `$${(intPriceEL * cartCounts[buttonIndex]).toFixed(2)}`
+                    // document.querySelector('.cart__end-total').innerHTML = `$${(intPriceEL * cartCounts[buttonIndex]).toFixed(2)}`
+                    // console.log('init',intPriceEL)
+                    // console.log('total',total)
+                    // console.log('cartcounts',cartCounts[buttonIndex])
+                    // console.log('umn',intPriceEL * cartCounts[buttonIndex])
                     // выставляем и сбрасываем флаг через 10мс
                     actionExecuted = true
                     setTimeout(() => actionExecuted = false,10)
