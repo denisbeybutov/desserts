@@ -23,11 +23,10 @@ function getDesserts() {
 
 //объявление корзины
 let cart = []
-// функция добавления в корзину 
+// функция добавления в корзину когда плюс
 function addToCart(dessert) {
-    // let cart = JSON.parse(localStorage.getItem('cart')) || []
     const existingItem = cart.find(item => item.id === dessert.id)
-
+    
     if(existingItem) {
         existingItem.quantity +=1
     } else {
@@ -37,7 +36,16 @@ function addToCart(dessert) {
         })
     }
 
-    // localStorage.setItem('cart', JSON.stringify(cart))
+}
+
+// функция добавления в корзину когда минус
+function addToCartDown(dessert) {
+    const existingItem = cart.find(item => item.id === dessert.id)
+    console.log(existingItem)
+    if(existingItem) {
+        existingItem.quantity -=1
+    } 
+
 }
 
 //функция отображения корзины
@@ -65,16 +73,18 @@ function showCart() {
         const cartDessertElement = document.createElement('li')
         cartDessertElement.className = 'cart__row'
         cartDessertElement.innerHTML = `
-                <div>
-                    ${cartDessert.name} </br>
-                    <span class="cart__count">
-                        ${cartDessert.quantity}x  &nbsp&nbsp
-                    </span>
-                        @$${(cartDessert.price).toFixed(2)} &nbsp
-                    <span class = "cart__row-total">
-                        $${(cartDessert.total()).toFixed(2)}
-                    </span>
-                    </br>
+                <div class = "cart__description">
+                    <div>
+                        ${cartDessert.name} </br>
+                        <span class="cart__count">
+                            ${cartDessert.quantity}x  &nbsp&nbsp
+                        </span>
+                            @$${(cartDessert.price).toFixed(2)} &nbsp
+                        <span class = "cart__row-total">
+                            $${(cartDessert.total()).toFixed(2)}
+                        </span>
+                        </br>
+                    </div>
                 </div>
                 <button class = "cart__clear-button">
                     +
@@ -104,6 +114,74 @@ function showCart() {
 
 }
 
+function showOrderConfirm() {
+
+            // по клику order confirmed подтверждаем заказ и выводим всплывающее окно
+            document.querySelector('.cart__confirm-button').addEventListener('click', function(){
+                
+                // выводим корзину в всплывающее окно
+                const order = document.querySelector('.order')
+                order.classList.remove('hidden')
+                order.querySelector('.order__confirmed').innerHTML = 
+                    '<img src = "./icon/done.svg" class = "order__svg">' +
+                    '<div class="desserts__h1 order__text-header">Order confirmed</div>' +
+                    '<p class="order__text">We hope you enjoy your food</p>' +
+                    '<div class="order__wrapper"></div>'
+                order.querySelector('.order__wrapper').innerHTML = `${document.querySelector('.cart__list').innerHTML}`
+                order.querySelector('.order__confirmed').appendChild(order.querySelector('.cart__confirm-button'))
+
+                // удалить кнопки крестики и заменить на общую цену с одной позиции
+                const cartRows = order.querySelectorAll('.cart__row')
+                cartRows.forEach(function(row, rowIndex){
+                    row.querySelector('.cart__clear-button').remove()
+                    const cartRowTotal = row.querySelector('.cart__row-total')
+                    row.appendChild(cartRowTotal)
+                    const imageDessert = document.createElement('img')
+                    imageDessert.className = 'order__image'
+                    imageDessert.src = cart[rowIndex].image
+                    row.querySelector('.cart__description').prepend(imageDessert)
+                })
+                
+                
+                //кнопка start new order и сброс заказа
+                order.querySelector('.cart__confirm-button').innerHTML = 'Start new order'
+                order.querySelector('.cart__confirm-button').addEventListener('click', function() {
+                    //убираем всплывающее окно
+                    order.classList.add('hidden')
+                    // в корзину пустой массив
+                    cart = []
+                    // показываем пустую корзину
+                    showCart()
+
+                    // устанавливаем в 0 все значения количества в объектах десертах
+                    allDesserts.forEach(function(dessert) {
+                        
+                        dessert.quantity = 0
+                        // console.log(dessert.quantity)
+                    })
+
+                    //сброс карточек desserts
+                    dessertsButtons.forEach(function(button) {
+                        if (button.classList.contains('active')) {
+                            button.classList.remove('active')
+                            button.innerHTML = `<img src="./icon/cart.svg" alt=""
+                                                class="desserts__icon">
+                                                <p>Add to cart</p>`
+                            button.previousElementSibling.classList.remove('active')
+                        }
+                    })
+
+                    //сброс корзины cart
+                    document.querySelector('.cart__wrapper').classList.remove('hidden')
+                    document.querySelector('.cart__list').classList.add('hidden')
+
+                })
+                
+
+
+            })
+}
+
 
 
 // инициализируем массив объектов - десертов
@@ -119,7 +197,7 @@ dessertsButtons.forEach(function(button){
         //меняем цвет кнопки
         button.classList.add('active')
         // делаем основную кнопку не активной 
-        // this.disabled = true 
+        this.disabled = true 
         //добавляем рамку для картинки
         button.previousElementSibling.classList.add('active')
         // ищем id кнопки и вставляем в id десерта
@@ -130,75 +208,41 @@ dessertsButtons.forEach(function(button){
         // добавляем в корзину десерт по нажатию кнопки
         addToCart(allDesserts[dessertId-1])
         showCart()
-        // в кнопку добавляем кнопки + - и счетчик
+        // в кнопку добавляем кнопки + - и счетчик (плохо работает, заменить)
         button.innerHTML = `
                             <button class="desserts__count" data-count="down"> - </button>
-                            <p> ${allDesserts[dessertId-1].quantity} </p>
+                            <p class = "desserts__counter"> ${allDesserts[dessertId-1].quantity} </p>
                             <button class="desserts__count" data-count="up"> + </button>
                           `
-        // по клику order confirmed подтверждаем заказ и выводим всплывающее окно
-        document.querySelector('.cart__confirm-button').addEventListener('click', function(){
-            // выводим корзину в всплывающее окно
-            const order = document.querySelector('.order')
-            order.classList.remove('hidden')
-            order.querySelector('.order__confirmed').innerHTML = 
-                '<img src = "./icon/done.svg" class = "order__svg">' +
-                '<div class="desserts__h1 order__text-header">Order confirmed</div>' +
-                '<p class="order__text">We hope you enjoy your food</p>' +
-                '<div class="order__wrapper"></div>'
-            order.querySelector('.order__wrapper').innerHTML = `${document.querySelector('.cart__list').innerHTML}`
-            order.querySelector('.order__confirmed').appendChild(order.querySelector('.cart__confirm-button'))
-
-            // удалить кнопки крестики и заменить на общую цену с одной позиции
-            const cartRows = order.querySelectorAll('.cart__row')
-            cartRows.forEach(function(row, rowIndex){
-                row.querySelector('.cart__clear-button').remove()
-                const cartRowTotal = row.querySelector('.cart__row-total')
-                row.appendChild(cartRowTotal)
-                const imageDessert = document.createElement('img')
-                imageDessert.className = 'order__image'
-                imageDessert.src = cart[rowIndex].image
-                row.prepend(imageDessert)
-            })
-            
-            
-            //кнопка start new order и сброс заказа
-            order.querySelector('.cart__confirm-button').innerHTML = 'Start new order'
-            order.querySelector('.cart__confirm-button').addEventListener('click', function() {
-                //убираем всплывающее окно
-                order.classList.add('hidden')
-                // в корзину пустой массив
-                cart = []
-                // показываем пустую корзину
-                showCart()
-
-                // устанавливаем в 0 все значения количества в объектах десертах
-                allDesserts.forEach(function(dessert) {
-                    
-                    dessert.quantity = 0
-                    // console.log(dessert.quantity)
-                })
-
-                //сброс карточек desserts
-                dessertsButtons.forEach(function(button) {
-                    if (button.classList.contains('active')) {
-                        button.classList.remove('active')
-                        button.innerHTML = `<img src="./icon/cart.svg" alt=""
-                                            class="desserts__icon">
-                                            <p>Add to cart</p>`
-                        button.previousElementSibling.classList.remove('active')
-                    }
-                })
-
-                //сброс корзины cart
-                document.querySelector('.cart__wrapper').classList.remove('hidden')
-                document.querySelector('.cart__list').classList.add('hidden')
-
-            })
-            
-
-
+        // слушаем кнопку плюс
+        button.querySelector('[data-count="up"]').addEventListener('click', function(){
+            // console.log('click up', button)
+            allDesserts[dessertId-1].quantity += 1
+            button.querySelector('.desserts__counter').innerHTML = `${allDesserts[dessertId-1].quantity}`
+            addToCart(allDesserts[dessertId-1])
+            showCart()
+            showOrderConfirm()
         })
+
+        //слушаем кнопку -
+        button.querySelector('[data-count="down"]').addEventListener('click', function(){
+            // console.log('click down', button)
+            allDesserts[dessertId-1].quantity -= 1
+            if ('quantity',allDesserts[dessertId-1].quantity > 0) {
+                button.querySelector('.desserts__counter').innerHTML = `${allDesserts[dessertId-1].quantity}`
+                addToCartDown(allDesserts[dessertId-1])
+                console.log('quantity',allDesserts[dessertId-1].quantity)
+                showCart()
+                showOrderConfirm()
+            } else {
+                allDesserts[dessertId-1].quantity = 0
+                
+
+            }
+            
+        })
+
+        
     })
 })
 
