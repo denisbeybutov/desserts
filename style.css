@@ -34,6 +34,7 @@ body {
 .desserts__h1 {
     padding-bottom: 20px;
     font-size: 30px;
+    font-weight: bold;
 }
 
 .desserts__list {
@@ -175,11 +176,15 @@ body {
     rotate: 45deg;
     color: rgb(156, 155, 155);
     cursor: pointer;
-    transition: opacity .4s;
+    transition: opacity .4s, color .4s, border .4s, scale .4s;
+    background-color: transparent;
 }
 
 .cart__clear-button:hover {
     opacity: .6;
+    border: 1px solid red;
+    color: red;
+    scale: 1.2;
 }
 
 .cart__img {
@@ -199,9 +204,15 @@ body {
     padding-top: 20px;
 }
 
+.cart__end-total {
+    font-size: 20px;
+    font-weight: bold;
+}
+
 .cart__total {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .cart__confirm-button {
@@ -219,6 +230,10 @@ body {
     background-color: #896258;
 }
 
+.cart__count {
+    color: var(--accent-color);
+    font-weight: bold;
+}
 
 
 .order {
@@ -234,12 +249,44 @@ body {
 }
 
 .order__confirmed {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
     color: var(--text-color);
-    background-color: var(--background-color);
-    width: 500px;
-    height: 400px;
+    background-color: var(--background-color-cart);
+    width: 550px;
     padding: 50px;
+    border-radius: 10px;
+    gap: 25px;
+}
 
+.order__svg {
+    border: 2px solid #36ab78;
+    border-radius: 50%;
+    width: 40px;
+}
+
+.order__text-header {
+    padding-bottom: 5px;
+    font-size: 40px;
+}
+
+.order__text {
+    opacity: .5;
+    margin-top: -30px;
+}
+
+.order__wrapper {
+    background-color: var(--background-color);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.order__image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
 }
 
 .hidden {

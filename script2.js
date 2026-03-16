@@ -59,7 +59,7 @@ function showCart() {
     //делаю видимым список товаров и заполняю
     cartList.classList.remove('hidden')
     cart.forEach(function(cartDessert) {
-        console.log('show cart')
+        // console.log('show cart')
         totalPrice += cartDessert.total()
         totalQuantity += cartDessert.quantity
         const cartDessertElement = document.createElement('li')
@@ -68,9 +68,9 @@ function showCart() {
                 <div>
                     ${cartDessert.name} </br>
                     <span class="cart__count">
-                        ${cartDessert.quantity}x
-                    </span>,
-                    @${(cartDessert.price).toFixed(2)},
+                        ${cartDessert.quantity}x  &nbsp&nbsp
+                    </span>
+                        @$${(cartDessert.price).toFixed(2)} &nbsp
                     <span class = "cart__row-total">
                         $${(cartDessert.total()).toFixed(2)}
                     </span>
@@ -82,13 +82,13 @@ function showCart() {
         
         cartList.appendChild(cartDessertElement)
     })
-    console.log('end cart')
+    // console.log('end cart')
 
     // выводим общую сумму и кнопку подтверждения
     cartList.innerHTML += `
                 <div class = "cart__end">
                     <div class = "cart__total" >
-                        <p>Total</p>
+                        <p>Order Total</p>
                         <p class = "cart__end-total">$${(totalPrice).toFixed(2)}</p>
                     </div>
                     <button class = "cart__confirm-button">
@@ -100,7 +100,7 @@ function showCart() {
     // выводим общее количество десертов в корзине
     cartTextHeader.innerHTML = `Your cart (${totalQuantity})`
 
-    console.log('cart', cart)
+    // console.log('cart', cart)
 
 }
 
@@ -113,7 +113,8 @@ const allDesserts = getDesserts()
 //let cart = JSON.parse(localStorage.getItem('cart')) || []
 
 // преобразуем кнопку при нажатии
-document.querySelectorAll('.desserts__button').forEach(function(button){
+const dessertsButtons = document.querySelectorAll('.desserts__button')
+dessertsButtons.forEach(function(button){
     button.addEventListener('click', function (){
         //меняем цвет кнопки
         button.classList.add('active')
@@ -137,8 +138,66 @@ document.querySelectorAll('.desserts__button').forEach(function(button){
                           `
         // по клику order confirmed подтверждаем заказ и выводим всплывающее окно
         document.querySelector('.cart__confirm-button').addEventListener('click', function(){
-            console.log('click conf')
-            document.querySelector('.order').classList.remove('hidden')
+            // выводим корзину в всплывающее окно
+            const order = document.querySelector('.order')
+            order.classList.remove('hidden')
+            order.querySelector('.order__confirmed').innerHTML = 
+                '<img src = "./icon/done.svg" class = "order__svg">' +
+                '<div class="desserts__h1 order__text-header">Order confirmed</div>' +
+                '<p class="order__text">We hope you enjoy your food</p>' +
+                '<div class="order__wrapper"></div>'
+            order.querySelector('.order__wrapper').innerHTML = `${document.querySelector('.cart__list').innerHTML}`
+            order.querySelector('.order__confirmed').appendChild(order.querySelector('.cart__confirm-button'))
+
+            // удалить кнопки крестики и заменить на общую цену с одной позиции
+            const cartRows = order.querySelectorAll('.cart__row')
+            cartRows.forEach(function(row, rowIndex){
+                row.querySelector('.cart__clear-button').remove()
+                const cartRowTotal = row.querySelector('.cart__row-total')
+                row.appendChild(cartRowTotal)
+                const imageDessert = document.createElement('img')
+                imageDessert.className = 'order__image'
+                imageDessert.src = cart[rowIndex].image
+                row.prepend(imageDessert)
+            })
+            
+            
+            //кнопка start new order и сброс заказа
+            order.querySelector('.cart__confirm-button').innerHTML = 'Start new order'
+            order.querySelector('.cart__confirm-button').addEventListener('click', function() {
+                //убираем всплывающее окно
+                order.classList.add('hidden')
+                // в корзину пустой массив
+                cart = []
+                // показываем пустую корзину
+                showCart()
+
+                // устанавливаем в 0 все значения количества в объектах десертах
+                allDesserts.forEach(function(dessert) {
+                    
+                    dessert.quantity = 0
+                    // console.log(dessert.quantity)
+                })
+
+                //сброс карточек desserts
+                dessertsButtons.forEach(function(button) {
+                    if (button.classList.contains('active')) {
+                        button.classList.remove('active')
+                        button.innerHTML = `<img src="./icon/cart.svg" alt=""
+                                            class="desserts__icon">
+                                            <p>Add to cart</p>`
+                        button.previousElementSibling.classList.remove('active')
+                    }
+                })
+
+                //сброс корзины cart
+                document.querySelector('.cart__wrapper').classList.remove('hidden')
+                document.querySelector('.cart__list').classList.add('hidden')
+
+            })
+            
+
+
         })
     })
 })
