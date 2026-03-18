@@ -74,7 +74,7 @@ function showCart() {
         cartDessertElement.className = 'cart__row'
         cartDessertElement.innerHTML = `
                 <div class = "cart__description">
-                    <div>
+                    <div data-id="${cartDessert.id}">
                         ${cartDessert.name} </br>
                         <span class="cart__count">
                             ${cartDessert.quantity}x  &nbsp&nbsp
@@ -182,15 +182,42 @@ function showOrderConfirm() {
             })
 }
 
+function listenClearBtnCart() {
+    document.querySelectorAll('.cart__clear-button').forEach(function(clearBtn){
+        clearBtn.addEventListener('click', function(){
+            // console.log('clear')
+            // console.log(this.previousElementSibling.querySelector("[data-id]").getAttribute('data-id'))
+            //id элемента который надо удалить из корзины 
+            const btnId = this.previousElementSibling.querySelector("[data-id]").getAttribute('data-id')
+            const btnIdNumber = parseInt(btnId,10)
+            // console.log(typeof cart)
+            console.log(cart)
+            cart.forEach(function(item, itemIndex) {
+                if (cart[itemIndex].id === btnId) {
+                    console.log(cart[itemIndex].id)
+                    console.log(typeof cart[itemIndex].id)
+                    console.log(btnId)
+                    console.log(typeof btnId)
+                    console.log(btnIdNumber)
+                    console.log(typeof btnIdNumber)
+                    console.log(cart[btnIdNumber-1])
+                    console.log(itemIndex)
+                    cart.splice(itemIndex, 1)
+                    console.log(cart)
+                    showCart()
+                }
+            })
+            
+        })
+    })
+}
 
+//-----------------начало кода--------------------------
 
 // инициализируем массив объектов - десертов
 const allDesserts = getDesserts()
 
-//инициализируем корзину, достаем из памяти данные по ключу cart или добавляем пустой массив
-//let cart = JSON.parse(localStorage.getItem('cart')) || []
-
-// преобразуем кнопку при нажатии
+// преобразуем кнопку при нажатии, слушаем кнопки на карточках десертов
 const dessertsButtons = document.querySelectorAll('.desserts__button')
 dessertsButtons.forEach(function(button){
     button.addEventListener('click', function (){
@@ -214,7 +241,7 @@ dessertsButtons.forEach(function(button){
                             <p class = "desserts__counter"> ${allDesserts[dessertId-1].quantity} </p>
                             <button class="desserts__count" data-count="up"> + </button>
                           `
-        // слушаем кнопку плюс
+        // слушаем кнопку +
         button.querySelector('[data-count="up"]').addEventListener('click', function(){
             // console.log('click up', button)
             allDesserts[dessertId-1].quantity += 1
@@ -236,13 +263,22 @@ dessertsButtons.forEach(function(button){
                 showOrderConfirm()
             } else {
                 allDesserts[dessertId-1].quantity = 0
-                
+                // (плохо работает, заменить)
 
             }
             
         })
 
+        //слуашем кнопку очистки товара из корзины
+        listenClearBtnCart()
+
+        //показывем confirm order
+        showOrderConfirm()
+
         
+
     })
 })
 
+//кнопка -
+//удаление из корзины
