@@ -193,23 +193,28 @@ function listenClearBtnCart() {
             
             cart.forEach(function(item, itemIndex) {
                 if (cart[itemIndex].id === btnId) {
-                    console.log(cart[itemIndex].id)
+                    
                     // сброс карточки сделать
                     document.querySelectorAll('.desserts__item').forEach(function(card) {
-                        console.log(card.getAttribute('data-id'))
+                        
                         if (card.getAttribute('data-id') === cart[itemIndex].id) {
-                            console.log('del')
+                            
                             card.querySelector('.desserts__button_start-var').classList.remove('hidden')
                             card.querySelector('.desserts__button_counter-var').classList.add('hidden')
                             card.querySelector('.desserts__button').classList.remove('active')
                             card.querySelector('.desserts__img').classList.remove('active')
-
-
+                           
+                            card.querySelector('.desserts__button').disabled = false 
+                           
+                            allDesserts[card.getAttribute('data-id')-1].quantity = 0
+                            
                         }
                     })
 
                     cart.splice(itemIndex, 1)
+                    
                     showCart()
+                    
                 }
                 
             })
@@ -226,6 +231,7 @@ const allDesserts = getDesserts()
 
 // преобразуем кнопку при нажатии, слушаем кнопки на карточках десертов
 const dessertsButtons = document.querySelectorAll('.desserts__button')
+
 dessertsButtons.forEach(function(button){
     button.addEventListener('click', function (){
         
@@ -246,10 +252,8 @@ dessertsButtons.forEach(function(button){
         // в кнопку добавляем кнопки + - и счетчик, меняем отображение кнопки
         button.firstElementChild.classList.add('hidden')
         button.lastElementChild.classList.remove('hidden')
-        button.querySelector('.desserts__button_counter-var').innerHTML = `
-                            <button class="desserts__count" data-count="down"> - </button>
-                            <p class = "desserts__counter"> ${allDesserts[dessertId-1].quantity} </p>
-                            <button class="desserts__count" data-count="up"> + </button>
+        button.querySelector('.desserts__counter').innerHTML = `
+                             ${allDesserts[dessertId-1].quantity} 
                           `
         // слушаем кнопку +
         button.querySelector('[data-count="up"]').addEventListener('click', function(){
@@ -272,8 +276,23 @@ dessertsButtons.forEach(function(button){
                 showCart()
                 showOrderConfirm()
             } else {
-                allDesserts[dessertId-1].quantity = 0
                 
+                this.parentElement.previousElementSibling.classList.remove('hidden')
+                this.parentElement.classList.add('hidden')
+                this.parentElement.parentElement.classList.remove('active')
+                this.parentElement.parentElement.previousElementSibling.classList.remove('active')
+                this.parentElement.parentElement.disabled = false              
+                
+                console.log(cart)
+                console.log('id кнопки',allDesserts[dessertId-1].id)
+                
+                cart.forEach(function(item, itemIndex) {
+                    if (cart[itemIndex].id === allDesserts[dessertId-1].id) {
+                        cart.splice(itemIndex, 1)
+                    
+                        showCart()
+                    }
+                }) 
                 // (плохо работает, заменить)
 
             }
@@ -288,6 +307,7 @@ dessertsButtons.forEach(function(button){
 
     })
 })
+
 
 
 //кнопка -
