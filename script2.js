@@ -111,6 +111,7 @@ function showCart() {
     cartTextHeader.innerHTML = `Your cart (${totalQuantity})`
 
     // console.log('cart', cart)
+    listenClearBtnCart()
 
 }
 
@@ -185,31 +186,37 @@ function showOrderConfirm() {
 function listenClearBtnCart() {
     document.querySelectorAll('.cart__clear-button').forEach(function(clearBtn){
         clearBtn.addEventListener('click', function(){
-            // console.log('clear')
-            // console.log(this.previousElementSibling.querySelector("[data-id]").getAttribute('data-id'))
+
             //id элемента который надо удалить из корзины 
             const btnId = this.previousElementSibling.querySelector("[data-id]").getAttribute('data-id')
             const btnIdNumber = parseInt(btnId,10)
-            // console.log(typeof cart)
-            console.log(cart)
+            
             cart.forEach(function(item, itemIndex) {
                 if (cart[itemIndex].id === btnId) {
                     console.log(cart[itemIndex].id)
-                    console.log(typeof cart[itemIndex].id)
-                    console.log(btnId)
-                    console.log(typeof btnId)
-                    console.log(btnIdNumber)
-                    console.log(typeof btnIdNumber)
-                    console.log(cart[btnIdNumber-1])
-                    console.log(itemIndex)
+                    // сброс карточки сделать
+                    document.querySelectorAll('.desserts__item').forEach(function(card) {
+                        console.log(card.getAttribute('data-id'))
+                        if (card.getAttribute('data-id') === cart[itemIndex].id) {
+                            console.log('del')
+                            card.querySelector('.desserts__button_start-var').classList.remove('hidden')
+                            card.querySelector('.desserts__button_counter-var').classList.add('hidden')
+                            card.querySelector('.desserts__button').classList.remove('active')
+                            card.querySelector('.desserts__img').classList.remove('active')
+
+
+                        }
+                    })
+
                     cart.splice(itemIndex, 1)
-                    console.log(cart)
                     showCart()
                 }
+                
             })
             
         })
     })
+    
 }
 
 //-----------------начало кода--------------------------
@@ -221,6 +228,7 @@ const allDesserts = getDesserts()
 const dessertsButtons = document.querySelectorAll('.desserts__button')
 dessertsButtons.forEach(function(button){
     button.addEventListener('click', function (){
+        
         //меняем цвет кнопки
         button.classList.add('active')
         // делаем основную кнопку не активной 
@@ -235,8 +243,10 @@ dessertsButtons.forEach(function(button){
         // добавляем в корзину десерт по нажатию кнопки
         addToCart(allDesserts[dessertId-1])
         showCart()
-        // в кнопку добавляем кнопки + - и счетчик (плохо работает, заменить)
-        button.innerHTML = `
+        // в кнопку добавляем кнопки + - и счетчик, меняем отображение кнопки
+        button.firstElementChild.classList.add('hidden')
+        button.lastElementChild.classList.remove('hidden')
+        button.querySelector('.desserts__button_counter-var').innerHTML = `
                             <button class="desserts__count" data-count="down"> - </button>
                             <p class = "desserts__counter"> ${allDesserts[dessertId-1].quantity} </p>
                             <button class="desserts__count" data-count="up"> + </button>
@@ -263,14 +273,13 @@ dessertsButtons.forEach(function(button){
                 showOrderConfirm()
             } else {
                 allDesserts[dessertId-1].quantity = 0
+                
                 // (плохо работает, заменить)
 
             }
             
         })
 
-        //слуашем кнопку очистки товара из корзины
-        listenClearBtnCart()
 
         //показывем confirm order
         showOrderConfirm()
@@ -279,6 +288,7 @@ dessertsButtons.forEach(function(button){
 
     })
 })
+
 
 //кнопка -
 //удаление из корзины

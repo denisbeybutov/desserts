@@ -99,6 +99,19 @@ body {
     cursor: default;
 }
 
+.desserts__button_start-var{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.desserts__button_counter-var {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
 .desserts__count {
     background-color: transparent;
     border: 1px solid var(--background-color);
