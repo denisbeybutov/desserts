@@ -109,7 +109,7 @@ body {
 .desserts__button_counter-var {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 33px;
 }
 
 .desserts__count {
@@ -341,4 +341,9 @@ body {
     .cart {
         width: 340px;
     }
+
+    .desserts__button_counter-var {
+        gap: 60px;
+    }
+
 }

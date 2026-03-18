@@ -147,6 +147,7 @@ function showOrderConfirm() {
                 //кнопка start new order и сброс заказа
                 order.querySelector('.cart__confirm-button').innerHTML = 'Start new order'
                 order.querySelector('.cart__confirm-button').addEventListener('click', function() {
+                    location.reload()
                     //убираем всплывающее окно
                     order.classList.add('hidden')
                     // в корзину пустой массив
