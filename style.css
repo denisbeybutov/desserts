@@ -1,12 +1,349 @@
 :root {
     --background-color: #FCf8f5;
+    --background-color-cart: #FFFFFF;
+    --border-radius: 50px;
+    --size-img: 250px;
+    --size-img-mobile: 340px;
+    --accent-color: #c83b0e;
+    --text-color:  #2f0f03;
+    --button-height: 50px;
 }
 
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     background-color: var(--background-color);
+    font-family: sans-serif;
+    color: var(--text-color);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+}
+
+.desserts {
+    width: 70%;
+}
+
+.desserts__h1 {
+    padding-bottom: 20px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.desserts__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.desserts__item {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    flex-grow: 0;
+    gap: 5px;
+    position: relative;
+    width: var(--size-img);
+}
+
+.desserts__img {
+    
+    height: var(--size-img);
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+.desserts__img.active {
+    border: 2px solid var(--accent-color);
+}
+
+.desserts__icon {
+    width: 20px;
+    height: 20px;
+}
+
+.desserts__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: var(--background-color-cart);
+    border: 1px solid var(--accent-color);
+    height: var(--button-height);
+    width: 60%;
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--size-img) - var(--button-height)  /2);
+    left: calc(20%);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+}
+
+.desserts__button:hover {
+    background-color: var(--background-color);
+    cursor: pointer;
+}
+
+.desserts__button.active {
+    background-color: var(--accent-color);
+    color: var(--background-color);
+    justify-content: space-between;
+    padding: 0 20px;
+    cursor: default;
+}
+
+.desserts__button_start-var{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.desserts__button_counter-var {
+    display: flex;
+    align-items: center;
+    gap: 33px;
+}
+
+.desserts__count {
+    background-color: transparent;
+    border: 1px solid var(--background-color);
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--background-color);
+    width: 20px;
+    height: 20px;
+    /* font-size: 15px; */
+
+}
+
+.desserts__count:hover {
+    background-color: var(--background-color);
+    color: var(--accent-color);
+}
+
+.desserts__type {
+    padding-top: 25px;
+    font-size: 13px;
+    opacity: .5;
+}
+
+.desserts__price {
+    font-size: 15px;
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.cart {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 300px;
+    height: fit-content;
+    background-color: var(--background-color-cart);
+    border-radius: var(--border-radius);
+   
+}
+
+.cart__text-header {
+    color: var(--accent-color);
+    font-size: 20px;
+    font-weight: bold;
+
+}
+
+.cart__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 0;
+    gap: 10px;
+}
+
+.cart__wrapper.active {
+    align-items: normal;
+}
+
+.cart__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgb(156, 155, 155);
+    padding: 15px 0;
+    
+}
+
+.cart__clear-button {
+    border: 1px solid rgb(156, 155, 155);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    rotate: 45deg;
+    color: rgb(156, 155, 155);
+    cursor: pointer;
+    transition: opacity .4s, color .4s, border .4s, scale .4s;
+    background-color: transparent;
+}
+
+.cart__clear-button:hover {
+    opacity: .6;
+    border: 1px solid red;
+    color: red;
+    scale: 1.2;
+}
+
+.cart__img {
+    width: 130px;
+    
+}
+
+.cart__text-footer {
+    color: #896258;
+    font-size: 12px;
+}
+
+.cart__end {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 20px;
+}
+
+.cart__end-total {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.cart__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart__confirm-button {
+    width: 100%;
+    background-color: var(--accent-color);
+    border: none;
+    border-radius: var(--border-radius);
+    height: var(--button-height);
+    color: var(--background-color);
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.cart__confirm-button:hover {
+    background-color: #896258;
+}
+
+.cart__count {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.cart__description {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+
+.order {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgb(68, 67, 67,.5);
+    padding: 50px;
+    display: flex;
+    align-items: center;
+    
+}
+
+.order__confirmed {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    color: var(--text-color);
+    background-color: var(--background-color-cart);
+    width: 90%;
+    max-width: 600px;
+    padding: 50px;
+    border-radius: 10px;
+    gap: 25px;
+}
+
+.order__svg {
+    border: 2px solid #36ab78;
+    border-radius: 50%;
+    width: 40px;
+}
+
+.order__text-header {
+    padding-bottom: 5px;
+    font-size: 40px;
+}
+
+.order__text {
+    opacity: .5;
+    margin-top: -30px;
+}
+
+.order__wrapper {
+    background-color: var(--background-color);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.order__image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 767px) {
+
+    
+    .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+    }
+
+    .desserts {
+        width: 380px;
+        padding: 0 20px;
+    }
+
+    .desserts__item {
+        width: var(--size-img-mobile);
+    }
+
+    .desserts__list {
+        justify-content: center;
+    }
+
+
+    .cart {
+        width: 340px;
+    }
+
+    .desserts__button_counter-var {
+        gap: 60px;
+    }
+
 }
